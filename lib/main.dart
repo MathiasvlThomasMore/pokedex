@@ -1,9 +1,11 @@
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:pokedex/firebase_options.dart';
-import 'package:pokedex/screens/pokédex.dart';
-import 'package:pokedex/screens/add_pokemon.dart';
+import 'package:pokedex/screens/pok%C3%A9dex.dart';
+
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +39,11 @@ class _PokedexAppState extends State<_PokedexApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
         body:Pokedex());
   }
 }
+
+
+
+

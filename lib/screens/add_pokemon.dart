@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 class AddPokemonPage extends StatefulWidget {
@@ -10,6 +11,14 @@ class AddPokemonPage extends StatefulWidget {
 }
 
 class _AddPokemonPageState extends State<AddPokemonPage> {
+  PlatformFile? pickedFile;
+  Future selectFile() async{
+    final result = await FilePicker.platform.pickFiles();
+    if(result==null) return;
+    setState(() {
+      pickedFile = result.files.first;
+    });
+  }
   final controllerName = TextEditingController();
   final controllerType = TextEditingController();
   final controllerSize = TextEditingController();
