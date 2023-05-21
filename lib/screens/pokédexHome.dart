@@ -1,29 +1,28 @@
-
+// ignore_for_file: file_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:pokedex/screens/add_pokemon.dart';
 import 'package:pokedex/screens/pok%C3%A9monDetail.dart';
-import 'package:quickalert/quickalert.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
-class Pokedex extends StatefulWidget {
-  const Pokedex({super.key});
+import 'add_pokemon.dart';
+
+class PokedexHome extends StatefulWidget {
+  const PokedexHome({Key? key}) : super(key: key);
 
   @override
-  State<Pokedex> createState() => _PokedexState();
+  State<PokedexHome> createState() => _PokedexHomeState();
 }
 
-class _PokedexState extends State<Pokedex> {
+class _PokedexHomeState extends State<PokedexHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey,
       appBar: AppBar(
-        title: Text('Pokédex'),
-        centerTitle: true,
-        backgroundColor: Colors.red,
-        leading: const Icon(MdiIcons.pokeball),
-      ),
+          title: const Center(child: Text('Pokédex')),
+          backgroundColor: Colors.red),
       body: StreamBuilder(
         stream: readPokemon(),
         builder: (context, snapshot) {
@@ -42,26 +41,18 @@ class _PokedexState extends State<Pokedex> {
           }
         },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const AddPokemonPage()));
-        },
-        label: const Text('Add Pokémon'),
-        icon: new Icon(MdiIcons.pokemonGo),
-        backgroundColor: Colors.red,
-      ),
     );
   }
 }
 
-Widget buildPokemon(Pokemon pokemon, BuildContext context) => (
-    InkWell(
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>PokemonDetailPage(pokemon: pokemon,)));
-      },
-        child: Card(
+Widget buildPokemon(Pokemon pokemon, BuildContext context) => (InkWell(
+    onTap: () {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => PokemonDetailPage(
+                pokemon: pokemon,
+              )));
+    },
+    child: Card(
       elevation: 10.0,
       child: Column(
         children: [
@@ -83,7 +74,10 @@ Widget buildPokemon(Pokemon pokemon, BuildContext context) => (
                           Navigator.pop(context);
                         });
                   },
-                  icon: const Icon(Icons.delete))),
+                  icon: const Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                  ))),
         ],
       ),
     )));

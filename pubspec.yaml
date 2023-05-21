@@ -18,6 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # of the product and file versions while build-number is used as the build suffix.
 version: 1.0.0+1
 
+
 environment:
   sdk: '>=2.19.6 <3.0.0'
 
@@ -28,18 +29,21 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  http:
   flutter:
     sdk: flutter
-
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+
   permission_handler: ^8.1.4+2
   firebase_core: ^2.9.0
   cloud_firestore: ^4.5.2
   material_design_icons_flutter: 6.0.7096
   file_picker: ^4.5.1
+  curved_navigation_bar: ^1.0.3
+  multiselect: ^0.0.7
   quickalert:
 dev_dependencies:
   flutter_test:
@@ -57,7 +61,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
+  assets:
+    - assets/images/pokedexPic.png
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

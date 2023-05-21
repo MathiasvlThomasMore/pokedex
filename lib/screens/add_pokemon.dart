@@ -1,7 +1,11 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:pokedex/screens/pok%C3%A9dexHome.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
+
+import '../widgets/multiselect.dart';
 
 class AddPokemonPage extends StatefulWidget {
   const AddPokemonPage({Key? key}) : super(key: key);
@@ -12,58 +16,129 @@ class AddPokemonPage extends StatefulWidget {
 
 class _AddPokemonPageState extends State<AddPokemonPage> {
   PlatformFile? pickedFile;
-  Future selectFile() async{
+  List<String> _selectedItems = [];
+  final formKey = GlobalKey<FormState>();
+  Future selectFile() async {
     final result = await FilePicker.platform.pickFiles();
-    if(result==null) return;
+    if (result == null) return;
     setState(() {
       pickedFile = result.files.first;
     });
   }
+
   final controllerName = TextEditingController();
-  final controllerType = TextEditingController();
   final controllerSize = TextEditingController();
+
+  void _showMultiSelect() async {
+    // a list of selectable items
+    // these items can be hard-coded or dynamically fetched from a database/API
+    final List<String> items = [
+      'Earth',
+      'Fire',
+      'Grass',
+    ];
+
+    final List<String>? results = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return MultiSelect(items: items);
+      },
+    );
+
+    // Update UI
+    if (results != null) {
+      setState(() {
+        _selectedItems = results;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: const Center(child: Text('Adding Pokémon')),
-          backgroundColor: Colors.red),
-      body: ListView(
-        padding: EdgeInsets.all(16),
-        children: <Widget>[
-          TextField(
-            controller: controllerName,
-            decoration: decoration('Name'),
+        backgroundColor: Colors.grey,
+        appBar: AppBar(
+            title: const Center(child: Text('Adding Pokémon')),
+            backgroundColor: Colors.red),
+        body: Form(
+          key: formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: ListView(
+            padding: const EdgeInsets.all(16),
+            children: <Widget>[
+              TextFormField(
+                controller: controllerName,
+                validator: (value) {
+                  if (value != null && value.length < 2) {
+                    return 'Enter at least 1 letter';
+                  }else if(value == null){
+                    return 'You have to fill in the name!';
+                  }
+                },
+                decoration: const InputDecoration(
+                    filled: true, fillColor: Colors.white, label: Text("Name")),
+              ),
+              const SizedBox(height: 24),
+              TextFormField(
+                validator: (value) {
+                  if (value != null && value.length < 2) {
+                    return 'Enter at least 1 letter';
+                  }else if(value == null){
+                    return 'You have to fill in the size!';
+                  }
+                },
+                controller: controllerSize,
+                decoration: const InputDecoration(
+                    filled: true, fillColor: Colors.white, label: Text("Size")),
+              ),
+              const SizedBox(height: 24),
+
+              ElevatedButton(
+                onPressed: _showMultiSelect,
+                child: const Text('Select your elements'),
+              ),
+              const Divider(
+                height: 10,
+              ),
+              // display selected items
+              Wrap(
+                children: _selectedItems
+                    .map((e) => Chip(
+                          label: Text(e),
+                        ))
+                    .toList(),
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    final isValidForm = formKey.currentState!.validate();
+                    if(isValidForm){
+                      final pokemon = Pokemon(
+                          name: controllerName.text, size: controllerSize.text);
+                      createPokemon(pokemon);
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                            return PokedexHome();
+                          }));
+                    }else{
+                      QuickAlert.show(
+                          context: context,
+                          type: QuickAlertType.warning,
+                          title: "You haven't filled in the data for the pokemon correctly");
+                    }
+                  },
+                  child: const Text('Add to Pokédex')),
+            ],
           ),
-          const SizedBox(height: 24),
-          TextField(
-            controller: controllerSize,
-            decoration: decoration('Size'),
-          ),
-          const SizedBox(height: 24),
-          ElevatedButton(
-              onPressed: () {
-                final pokemon = Pokemon(
-                    name: controllerName.text,
-                    size: controllerSize.text);
-                createPokemon(pokemon);
-                Navigator.pop(context);
-              },
-              child: Text('Add to PokéDex'))
-        ],
-      ),
-    );
+        ));
   }
 
   InputDecoration decoration(String label) => InputDecoration(
         labelText: label,
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
       );
 
   Future createPokemon(Pokemon pokemon) async {
-    final docPokemon =
-        FirebaseFirestore.instance.collection("Pokemon").doc();
+    final docPokemon = FirebaseFirestore.instance.collection("Pokemon").doc();
     pokemon.id = docPokemon.id;
 
     //Create document and write data to Firebase
@@ -76,16 +151,14 @@ class Pokemon {
   String id;
   final String name;
   final String size;
-  Pokemon(
-      {this.id = '',
-      required this.name,
-      required this.size});
 
-  Map<String, dynamic> toJson() =>
-      {'id': id, 'name': name, 'size': size};
-  static Pokemon fromJson(Map<String,dynamic> json) => Pokemon(
-    id:json['id'],
-      name: json['name'],
-      size: json['size'],
-  );
+  Pokemon({this.id = '', required this.name, required this.size});
+
+  Map<String, dynamic> toJson() => {'id': id, 'name': name, 'size': size};
+
+  static Pokemon fromJson(Map<String, dynamic> json) => Pokemon(
+        id: json['id'],
+        name: json['name'],
+        size: json['size'],
+      );
 }

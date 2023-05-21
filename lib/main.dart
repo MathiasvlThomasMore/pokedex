@@ -1,8 +1,12 @@
 
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pokedex/firebase_options.dart';
-import 'package:pokedex/screens/pok%C3%A9dex.dart';
+import 'package:pokedex/screens/add_pokemon.dart';
+import 'package:pokedex/screens/infoScreen.dart';
+import 'package:pokedex/screens/pok%C3%A9dexHome.dart';
 
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -36,11 +40,39 @@ class _PokedexApp extends StatefulWidget {
 
 class _PokedexAppState extends State<_PokedexApp> {
 
+  int currentIndex = 0;
+  final screens = [
+    const PokedexHome(),
+    const AddPokemonPage(),
+    const InfoScreen()
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-        body:Pokedex());
+    return Scaffold(
+      body: screens[currentIndex],
+      bottomNavigationBar: CurvedNavigationBar(
+        items: const [
+          Icon(
+            Icons.home,
+          ),
+          Icon(
+            MdiIcons.pokemonGo,
+          ),
+          Icon(
+            Icons.info,
+          ),
+
+        ],
+        backgroundColor: Colors.grey,
+        animationDuration: const Duration(milliseconds: 300),
+        onTap: (index) {
+          setState(() {
+            currentIndex = index;
+          });
+        },
+      ),
+    );
   }
 }
 
