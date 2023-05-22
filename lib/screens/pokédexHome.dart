@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pokedex/screens/pok%C3%A9monDetail.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
@@ -21,6 +22,10 @@ class _PokedexHomeState extends State<PokedexHome> {
     return Scaffold(
       backgroundColor: Colors.grey,
       appBar: AppBar(
+          actions: <Widget>[
+            const Icon(MdiIcons.pokeball),
+          ],
+          centerTitle: true,
           title: const Center(child: Text('Pokédex')),
           backgroundColor: Colors.red),
       body: StreamBuilder(
@@ -36,8 +41,11 @@ class _PokedexHomeState extends State<PokedexHome> {
               childAspectRatio: (1 / .5),
               children: users.map((e) => buildPokemon(e, context)).toList(),
             );
+          } else if (!snapshot.hasData) {
+            return const Center(
+                child: Text("No pokémon are in the database! Go and some"));
           } else {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: RefreshProgressIndicator());
           }
         },
       ),
@@ -52,14 +60,51 @@ Widget buildPokemon(Pokemon pokemon, BuildContext context) => (InkWell(
                 pokemon: pokemon,
               )));
     },
-    child: ListView(
-children: [
-  Center(child:Text(pokemon.name)),
-Text(pokemon.size),
-],
-    )
-    
-    ));
+    child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        elevation: 10.0,
+        child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+          ListTile(
+              leading: CircleAvatar(child: Text(pokemon.id)),
+              title: Text(pokemon.name),
+              subtitle: Text(pokemon.size)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(onPressed: () {}, icon: const Icon(Icons.edit)),
+              IconButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                              title: Text(
+                                  "Are you sure you want to delete ${pokemon.name}?"),
+                              content: Text(
+                                  "${pokemon.name} will be released in the wilderness again!"),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      final docPokemon = FirebaseFirestore
+                                          .instance
+                                          .collection('Pokemon')
+                                          .doc(pokemon.id);
+
+                                      docPokemon.delete();
+                                      Navigator.pop(context, 'Ok');
+                                    },
+                                    child: Text("Ok")),
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, 'Cancel');
+                                    },
+                                    child: Text("Cancel"))
+                              ],
+                            ));
+                  },
+                  icon: const Icon(Icons.delete))
+            ],
+          )
+        ]))));
 
 Stream<List<Pokemon>> readPokemon() => FirebaseFirestore.instance
     .collection('Pokemon')

@@ -16,7 +16,8 @@ class AddPokemonPage extends StatefulWidget {
 
 class _AddPokemonPageState extends State<AddPokemonPage> {
   PlatformFile? pickedFile;
-  List<String> _selectedItems = [];
+  List<dynamic> _selectedItems = [];
+
   final formKey = GlobalKey<FormState>();
   Future selectFile() async {
     final result = await FilePicker.platform.pickFiles();
@@ -32,11 +33,7 @@ class _AddPokemonPageState extends State<AddPokemonPage> {
   void _showMultiSelect() async {
     // a list of selectable items
     // these items can be hard-coded or dynamically fetched from a database/API
-    final List<String> items = [
-      'Earth',
-      'Fire',
-      'Grass',
-    ];
+    final List<String> items = ['Earth', 'Fire', 'Grass', 'Water', 'Air'];
 
     final List<String>? results = await showDialog(
       context: context,
@@ -49,6 +46,7 @@ class _AddPokemonPageState extends State<AddPokemonPage> {
     if (results != null) {
       setState(() {
         _selectedItems = results;
+        print(_selectedItems[0]);
       });
     }
   }
@@ -58,8 +56,9 @@ class _AddPokemonPageState extends State<AddPokemonPage> {
     return Scaffold(
         backgroundColor: Colors.grey,
         appBar: AppBar(
-            title: const Center(child: Text('Adding Pokémon')),
-            backgroundColor: Colors.red),
+          title: const Center(child: Text('Adding Pokémon')),
+          backgroundColor: Colors.red,
+        ),
         body: Form(
           key: formKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -113,11 +112,13 @@ class _AddPokemonPageState extends State<AddPokemonPage> {
                     final isValidForm = formKey.currentState!.validate();
                     if (isValidForm) {
                       final pokemon = Pokemon(
-                          name: controllerName.text, size: controllerSize.text);
+                          name: controllerName.text,
+                          size: controllerSize.text,
+                          element1: _selectedItems.first);
                       createPokemon(pokemon);
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return PokedexHome();
+                        return const PokedexHome();
                       }));
                     } else {
                       QuickAlert.show(
@@ -152,15 +153,20 @@ class Pokemon {
   String id;
   final String name;
   final String size;
- 
+  final String element1;
 
-  Pokemon({this.id = '', required this.name, required this.size});
+  Pokemon(
+      {this.id = '',
+      required this.name,
+      required this.size,
+      required this.element1});
 
-  Map<String, dynamic> toJson() => {'id': id, 'name': name, 'size': size};
+  Map<String, dynamic> toJson() =>
+      {'id': id, 'name': name, 'size': size, 'elements': element1};
 
   static Pokemon fromJson(Map<String, dynamic> json) => Pokemon(
-        id: json['id'],
-        name: json['name'],
-        size: json['size'],
-      );
+      id: json['id'],
+      name: json['name'],
+      size: json['size'],
+      element1: json['elements']);
 }
