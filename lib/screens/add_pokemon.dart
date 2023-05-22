@@ -71,7 +71,7 @@ class _AddPokemonPageState extends State<AddPokemonPage> {
                 validator: (value) {
                   if (value != null && value.length < 2) {
                     return 'Enter at least 1 letter';
-                  }else if(value == null){
+                  } else if (value == null) {
                     return 'You have to fill in the name!';
                   }
                 },
@@ -83,7 +83,7 @@ class _AddPokemonPageState extends State<AddPokemonPage> {
                 validator: (value) {
                   if (value != null && value.length < 2) {
                     return 'Enter at least 1 letter';
-                  }else if(value == null){
+                  } else if (value == null) {
                     return 'You have to fill in the size!';
                   }
                 },
@@ -111,19 +111,20 @@ class _AddPokemonPageState extends State<AddPokemonPage> {
               ElevatedButton(
                   onPressed: () {
                     final isValidForm = formKey.currentState!.validate();
-                    if(isValidForm){
+                    if (isValidForm) {
                       final pokemon = Pokemon(
                           name: controllerName.text, size: controllerSize.text);
                       createPokemon(pokemon);
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                            return PokedexHome();
-                          }));
-                    }else{
+                        return PokedexHome();
+                      }));
+                    } else {
                       QuickAlert.show(
                           context: context,
                           type: QuickAlertType.warning,
-                          title: "You haven't filled in the data for the pokemon correctly");
+                          title:
+                              "You haven't filled in the data for the pokemon correctly");
                     }
                   },
                   child: const Text('Add to Pokédex')),
@@ -151,6 +152,7 @@ class Pokemon {
   String id;
   final String name;
   final String size;
+ 
 
   Pokemon({this.id = '', required this.name, required this.size});
 

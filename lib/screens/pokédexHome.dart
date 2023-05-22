@@ -52,35 +52,14 @@ Widget buildPokemon(Pokemon pokemon, BuildContext context) => (InkWell(
                 pokemon: pokemon,
               )));
     },
-    child: Card(
-      elevation: 10.0,
-      child: Column(
-        children: [
-          ListTile(
-              title: Text(pokemon.name),
-              subtitle: Text(pokemon.size),
-              trailing: IconButton(
-                  onPressed: () {
-                    QuickAlert.show(
-                        context: context,
-                        type: QuickAlertType.confirm,
-                        title: "Sure you want to remove ${pokemon.name}?",
-                        onConfirmBtnTap: () {
-                          DocumentReference documentReference =
-                              FirebaseFirestore.instance
-                                  .collection('Pokemon')
-                                  .doc(pokemon.id);
-                          documentReference.delete();
-                          Navigator.pop(context);
-                        });
-                  },
-                  icon: const Icon(
-                    Icons.delete,
-                    color: Colors.red,
-                  ))),
-        ],
-      ),
-    )));
+    child: ListView(
+children: [
+  Center(child:Text(pokemon.name)),
+Text(pokemon.size),
+],
+    )
+    
+    ));
 
 Stream<List<Pokemon>> readPokemon() => FirebaseFirestore.instance
     .collection('Pokemon')
