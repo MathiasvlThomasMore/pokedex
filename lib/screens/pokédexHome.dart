@@ -22,8 +22,8 @@ class _PokedexHomeState extends State<PokedexHome> {
     return Scaffold(
       backgroundColor: Colors.grey,
       appBar: AppBar(
-          actions: <Widget>[
-            const Icon(MdiIcons.pokeball),
+          actions: const <Widget>[
+            Icon(MdiIcons.pokeball),
           ],
           centerTitle: true,
           title: const Center(child: Text('Pokédex')),
@@ -80,8 +80,7 @@ Widget buildPokemon(Pokemon pokemon, BuildContext context) => (InkWell(
             ),
             Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
               ListTile(
-                  leading: CircleAvatar(child: Icon(MdiIcons.pokeball,color: Colors.white,),
-                  backgroundColor: Colors.red,),
+                  leading: const CircleAvatar(backgroundColor: Colors.red,child: Icon(MdiIcons.pokeball,color: Colors.white,),),
                   title: Text(pokemon.name),
                   subtitle: Text(pokemon.size)),
               Row(
