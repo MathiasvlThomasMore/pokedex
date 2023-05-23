@@ -293,6 +293,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  pokeball_widget:
+    dependency: "direct main"
+    description:
+      name: pokeball_widget
+      sha256: "96c9c1215400c03e479ec5b5cbd07705947af56d3675c6ba0e6ac81d2e96d472"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0+3"
   quickalert:
     dependency: "direct main"
     description:

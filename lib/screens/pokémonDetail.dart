@@ -22,7 +22,9 @@ class PokemonDetailPage extends StatelessWidget {
         children: [
           Center(
               child: Image.network(
-                  "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png"))
+                  "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png")),
+          Text("Size: "+pokemon.size),
+          Text("First element: " + pokemon.element1)
         ],
       ),
     );
