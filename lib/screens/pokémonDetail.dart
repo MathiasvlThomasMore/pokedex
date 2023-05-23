@@ -43,30 +43,30 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
     }
   }
 
+  void fillList() {
+    for (var i = 0; i < dataFromAPI!.pokemon.length; i++) {
+      if (dataFromAPI!.pokemon[i].name==widget.pokemon.name){
+        print(dataFromAPI!.pokemon[i].name);
+       // rightList.add(dataFromAPI!.pokemon[i]);
+
+      }
+
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.pokemon.name),
-        backgroundColor: Colors.red,
-        centerTitle: true,
-      ),
-      body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : ListView.builder(
-              itemBuilder: (context, index) {
-                if(dataFromAPI!.pokemon[index].name==widget.pokemon.name){
-                  print(dataFromAPI!.pokemon[index].name);
-                  return const Center(child: Text("This is the pokemon!"),);
-                }else{
-                  return const Text("This is the wrong one");
-                }
-
-              },
-              itemCount: 10,
-            ),
+        appBar: AppBar(
+          title: Text(widget.pokemon.name),
+          backgroundColor: Colors.red,
+          centerTitle: true,
+        ),
+        body: Center(
+            child: IconButton(icon: Icon(Icons.add), onPressed: () {
+              fillList();
+            },)
+        )
     );
   }
 }
