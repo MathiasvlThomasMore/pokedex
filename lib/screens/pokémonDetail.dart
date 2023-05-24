@@ -20,6 +20,7 @@ class PokemonDetailPage extends StatefulWidget {
 class _PokemonDetailPageState extends State<PokemonDetailPage> {
   bool _isLoading = true;
 
+
   @override
   void initState() {
     super.initState();
@@ -27,7 +28,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
   }
 
   Pokedex? dataFromAPI;
-
+  List<String> rightList = [];
   _getData() async {
     try {
       String url =
@@ -45,14 +46,14 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
 
   void fillList() {
     for (var i = 0; i < dataFromAPI!.pokemon.length; i++) {
-      if (dataFromAPI!.pokemon[i].name==widget.pokemon.name){
-        print(dataFromAPI!.pokemon[i].name);
-       // rightList.add(dataFromAPI!.pokemon[i]);
-
+      if (dataFromAPI!.pokemon[i].name == widget.pokemon.name) {
+        rightList.add(dataFromAPI!.pokemon[i].name);
+        rightList.add(dataFromAPI!.pokemon[i].img);
       }
-
     }
+    print(rightList);
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -62,11 +63,22 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
           backgroundColor: Colors.red,
           centerTitle: true,
         ),
-        body: Center(
-            child: IconButton(icon: Icon(Icons.add), onPressed: () {
-              fillList();
-            },)
+        body: Column(
+          children: [
+Image.network("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"),
+            Center(
+                child: IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () {
+                    fillList();
+                  },
+                ))
+          ],
         )
-    );
+
+     );
   }
 }
+
+
+
