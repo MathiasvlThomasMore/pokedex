@@ -3,16 +3,11 @@ import 'package:flutter/material.dart';
 
 import '../model/pokemon.dart';
 
-class PokemonDetailPage extends StatefulWidget {
+class PokemonDetailPage extends StatelessWidget {
   final Pokemon pokemon;
 
-  const PokemonDetailPage({super.key, required this.pokemon});
+   PokemonDetailPage({super.key, required this.pokemon});
 
-  @override
-  State<PokemonDetailPage> createState() => _PokemonDetailPageState();
-}
-
-class _PokemonDetailPageState extends State<PokemonDetailPage> {
   var color;
 
   Image customImage(img) {
@@ -80,7 +75,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                 ),
                 child: Align(
                   alignment: Alignment.center,
-                  child: customImage(widget.pokemon.pokeballType),
+                  child: customImage(pokemon.pokeballType),
                 ),
               ),
               Container(
@@ -88,7 +83,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                 child: Align(
                   alignment: Alignment.center,
                   child: Text(
-                    widget.pokemon.name,
+                    pokemon.name,
                     style: const TextStyle(
                         color: Colors.black,
                         fontSize: 40,
@@ -114,7 +109,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                 alignment: Alignment.center,
                 child: Container(
                   padding: EdgeInsets.all(20),
-                  child: Text(widget.pokemon.bio),
+                  child: Text(pokemon.bio),
                 ),
               ),
               Align(
@@ -137,13 +132,13 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                       Text("Elements:"),
                       Spacer(),
                       Text(
-                        "${widget.pokemon.element1} ",
+                        "${pokemon.element1} ",
                         style: TextStyle(
-                            color: customColor(widget.pokemon.element1)),
+                            color: customColor(pokemon.element1)),
                       ),
-                      Text(widget.pokemon.element2,
+                      Text(pokemon.element2,
                           style: TextStyle(
-                              color: customColor(widget.pokemon.element2))),
+                              color: customColor(pokemon.element2))),
                     ],
                   )),
               Container(
@@ -152,7 +147,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                     children: [
                       Text("Size:"),
                       Spacer(),
-                      Text("${widget.pokemon.size}")
+                      Text("${pokemon.size}")
                     ],
                   )),
               Container(
@@ -161,7 +156,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                     children: [
                       Text("Pokéball type:"),
                       Spacer(),
-                      Text("${widget.pokemon.pokeballType}")
+                      Text("${pokemon.pokeballType}")
                     ],
                   ))
             ],

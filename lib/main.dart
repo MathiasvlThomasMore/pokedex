@@ -47,7 +47,7 @@ class _PokedexAppState extends State<_PokedexApp> {
   final screens = [
     const PokedexHome(),
     const AddPokemonPage(),
-    const InfoScreen()
+    InfoScreen()
   ];
 
   @override

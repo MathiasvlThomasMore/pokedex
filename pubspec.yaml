@@ -37,8 +37,10 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
+  youtube_player_flutter: ^8.1.0
   cupertino_icons: ^1.0.2
-
+  audioplayers: ^2.0.0
+  video_player: ^2.5.1
   permission_handler: ^8.1.4+2
   firebase_core: ^2.9.0
   cloud_firestore: ^4.5.2
@@ -92,6 +94,7 @@ flutter:
     - assets/images/master_ball.png
     - assets/images/ultra_ball.png
     - assets/images/pokeball_icon.png
+    - assets/audio/pokeball_sound.mp3
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

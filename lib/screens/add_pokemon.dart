@@ -8,7 +8,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:pokedex/screens/pok%C3%A9dexHome.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
-
+import 'package:audioplayers/audioplayers.dart';
 import '../model/pokemon.dart';
 import '../widgets/multiselect.dart';
 
@@ -20,6 +20,7 @@ class AddPokemonPage extends StatefulWidget {
 }
 
 class _AddPokemonPageState extends State<AddPokemonPage> {
+  final AudioPlayer player = AudioPlayer();
   PlatformFile? pickedFile;
   List<dynamic> _selectedItems = [];
   List<dynamic> _selectedPokeballs = [];
@@ -228,6 +229,7 @@ class _AddPokemonPageState extends State<AddPokemonPage> {
               Center(
                   child: ElevatedButton(
                       onPressed: () {
+                        player.play(AssetSource('audio/pokeball_sound.mp3'),volume: 1);
                         setState(() {
                           _toggle = !_toggle;
                           Timer(Duration(seconds: 6), () {
