@@ -24,8 +24,11 @@ class PokeDexApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       home: _PokedexApp(),
+      theme: ThemeData(
+        fontFamily: 'Poppins'
+      ),
       debugShowCheckedModeBanner: false,
     );
   }

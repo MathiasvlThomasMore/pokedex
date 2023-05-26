@@ -10,13 +10,11 @@ import 'add_pokemon.dart';
 
 class PokedexHome extends StatefulWidget {
   const PokedexHome({Key? key}) : super(key: key);
-
   @override
   State<PokedexHome> createState() => _PokedexHomeState();
 }
 
 class _PokedexHomeState extends State<PokedexHome> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +36,7 @@ class _PokedexHomeState extends State<PokedexHome> {
             return GridView.count(
               //amount of cards next to eachother
               crossAxisCount: 2,
-              childAspectRatio: (1 / .5),
+              childAspectRatio: (1 / .62),
               children: users.map((e) => buildPokemon(e, context)).toList(),
             );
           } else if (!snapshot.hasData) {
@@ -54,84 +52,94 @@ class _PokedexHomeState extends State<PokedexHome> {
 }
 
 Widget buildPokemon(Pokemon pokemon, BuildContext context) => (InkWell(
-    onTap: () {
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => PokemonDetailPage(
-                pokemon: pokemon,
-              )));
-    },
-    child: Card(
-      clipBehavior: Clip.hardEdge,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      elevation: 8,
-      child: LayoutBuilder(
-        builder: (context, constraints) => Stack(
-          children: [
-            Positioned(
-              right: constraints.maxWidth * -0.04,
-              top: constraints.minHeight * 0.1,
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height / 6,
-                width: MediaQuery.of(context).size.height / 6,
-                child: PokeBallWidget(
-                  color: Colors.red,
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => PokemonDetailPage(
+                  pokemon: pokemon,
+                )));
+      },
+      child: Card(
+        clipBehavior: Clip.hardEdge,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        elevation: 8,
+        child: LayoutBuilder(
+          builder: (context, constraints) => SizedBox(
+            height: 200,
+            child: Stack(
+            children: [
+              Positioned(
+                right: constraints.maxWidth * -0.04,
+                top: constraints.minHeight * 0.1,
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height / 6,
+                  width: MediaQuery.of(context).size.height / 6,
+                  child: PokeBallWidget(
+                    color: Colors.red,
+                  ),
                 ),
               ),
-            ),
-            Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-              ListTile(
-                  leading: const CircleAvatar(backgroundColor: Colors.red,child: Icon(MdiIcons.pokeball,color: Colors.white,),),
-                  title: Text(pokemon.name),
-                  subtitle: Text(pokemon.size)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  //edit and delete button
-                  IconButton(onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                          return EditPokemon(pokemon: pokemon);
-                        }));
+              Wrap(children: <Widget>[
+                ListTile(
+                    leading: const CircleAvatar(
+                      backgroundColor: Colors.red,
+                      child: Icon(
+                        MdiIcons.pokeball,
+                        color: Colors.white,
+                      ),
+                    ),
+                    title: Text(pokemon.name,style: const TextStyle(fontFamily: 'Poppins'),),
+                    subtitle: Text(pokemon.size)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    //edit and delete button
 
-                  }, icon: const Icon(Icons.edit)),
-                  IconButton(
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              title: Text(
-                                  "Are you sure you want to delete ${pokemon.name}?"),
-                              content: Text(
-                                  "${pokemon.name} will be released in the wilderness again!"),
-                              actions: [
-                                TextButton(
-                                    onPressed: () {
-                                      final docPokemon = FirebaseFirestore
-                                          .instance
-                                          .collection('Pokemon')
-                                          .doc(pokemon.id);
+                    IconButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                                return EditPokemon(pokemon: pokemon);
+                              }));
+                        },
+                        icon: const Icon(Icons.edit)),
+                    IconButton(
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: Text(
+                                    "Are you sure you want to delete ${pokemon.name}?"),
+                                content: Text(
+                                    "${pokemon.name} will be released in the wilderness again!"),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        final docPokemon = FirebaseFirestore
+                                            .instance
+                                            .collection('Pokemon')
+                                            .doc(pokemon.id);
 
-                                      docPokemon.delete();
-                                      Navigator.pop(context, 'Ok');
-                                    },
-                                    child: Text("Ok")),
-                                TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context, 'Cancel');
-                                    },
-                                    child: Text("Cancel"))
-                              ],
-                            ));
-                      },
-                      icon: const Icon(Icons.delete))
-                ],
-              )
-              ]
-              )
-
-          ],
+                                        docPokemon.delete();
+                                        Navigator.pop(context, 'Ok');
+                                      },
+                                      child: Text("Ok")),
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context, 'Cancel');
+                                      },
+                                      child: Text("Cancel"))
+                                ],
+                              ));
+                        },
+                        icon: const Icon(Icons.delete))
+                  ],
+                )
+              ])
+            ],
+          ),)
         ),
-      ),)));
+      ),
+    ));
 
 Stream<List<Pokemon>> readPokemon() => FirebaseFirestore.instance
     .collection('Pokemon')

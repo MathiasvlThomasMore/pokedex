@@ -1,12 +1,5 @@
-// ignore: file_names
-// ignore_for_file: unused_import, file_names, duplicate_ignore
-
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:pokedex/data_model.dart';
 import 'package:pokedex/screens/add_pokemon.dart';
-import 'package:http/http.dart' as http;
 
 class PokemonDetailPage extends StatefulWidget {
   final Pokemon pokemon;
@@ -18,67 +11,159 @@ class PokemonDetailPage extends StatefulWidget {
 }
 
 class _PokemonDetailPageState extends State<PokemonDetailPage> {
-  bool _isLoading = true;
+  var color;
 
-
-  @override
-  void initState() {
-    super.initState();
-    _getData();
-  }
-
-  Pokedex? dataFromAPI;
-  List<String> rightList = [];
-  _getData() async {
-    try {
-      String url =
-          "https://raw.githubusercontent.com/Biuni/PokemonGO-Pokedex/master/pokedex.json";
-      http.Response res = await http.get(Uri.parse(url));
-      if (res.statusCode == 200) {
-        dataFromAPI = Pokedex.fromJson(json.decode(res.body));
-        _isLoading = false;
-        setState(() {});
-      }
-    } catch (e) {
-      debugPrint(e.toString());
+  Image customImage(img) {
+    switch (img) {
+      case "Poké Ball":
+        return Image.asset("assets/images/normal_pokeball.png");
+      case "Great Ball":
+        return Image.asset("assets/images/great_ball.png");
+      case "Master Ball":
+        return Image.asset("assets/images/master_ball.png");
+      case "Ultra Ball":
+        return Image.asset("assets/images/ultra_ball.png");
+      default:
+        return Image.asset("assets/images/normal_pokeball.png");
     }
   }
 
-  void fillList() {
-    for (var i = 0; i < dataFromAPI!.pokemon.length; i++) {
-      if (dataFromAPI!.pokemon[i].name == widget.pokemon.name) {
-        rightList.add(dataFromAPI!.pokemon[i].name);
-        rightList.add(dataFromAPI!.pokemon[i].img);
-      }
+  Color customColor(element) {
+    switch (element) {
+      case "Water":
+        return Colors.blue;
+      case "Earth":
+        return Colors.brown;
+      case "Fire":
+        return Colors.red;
+      case "Grass":
+        return Colors.green;
+      case "Air":
+        return Colors.grey;
+      default:
+        return Colors.black;
     }
-    print(rightList);
   }
-
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         appBar: AppBar(
-          title: Text(widget.pokemon.name),
           backgroundColor: Colors.red,
           centerTitle: true,
+          elevation: 0,
+          iconTheme: const IconThemeData(
+            color: Colors.white,
+          ),
         ),
-        body: Column(
-          children: [
-Image.network("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"),
-            Center(
-                child: IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: () {
-                    fillList();
-                  },
-                ))
-          ],
-        )
-
-     );
+        body: Container(
+          color: Colors.black12,
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.only(bottom: 38),
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(90),
+                      bottomRight: Radius.circular(90)),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black45.withOpacity(0.5),
+                        spreadRadius: 1,
+                        blurRadius: 15,
+                        offset: Offset(0, 15)),
+                  ],
+                ),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: customImage(widget.pokemon.pokeballType),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.only(top: 20, bottom: 70),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    widget.pokemon.name,
+                    style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 40,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  margin: EdgeInsets.only(left: 10),
+                  decoration: const BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(color: Colors.red, width: 3.0))),
+                  child: const Text(
+                    "About",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  child: Text(widget.pokemon.bio),
+                ),
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  margin: EdgeInsets.only(left: 10),
+                  decoration: const BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(color: Colors.red, width: 3.0))),
+                  child: const Text(
+                    "Pokémon Data",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Container(
+                  margin: const EdgeInsets.only(left: 10, right: 10, top: 10),
+                  child: Row(
+                    children: [
+                      Text("Elements:"),
+                      Spacer(),
+                      Text(
+                        "${widget.pokemon.element1} ",
+                        style: TextStyle(
+                            color: customColor(widget.pokemon.element1)),
+                      ),
+                      Text(widget.pokemon.element2,
+                          style: TextStyle(
+                              color: customColor(widget.pokemon.element2))),
+                    ],
+                  )),
+              Container(
+                  margin: const EdgeInsets.only(left: 10, right: 10, top: 10),
+                  child: Row(
+                    children: [
+                      Text("Size:"),
+                      Spacer(),
+                      Text("${widget.pokemon.size}")
+                    ],
+                  )),
+              Container(
+                  margin: const EdgeInsets.only(left: 10, right: 10, top: 10),
+                  child: Row(
+                    children: [
+                      Text("Pokéball type:"),
+                      Spacer(),
+                      Text("${widget.pokemon.pokeballType}")
+                    ],
+                  ))
+            ],
+          ),
+        ));
   }
 }
-
-
-

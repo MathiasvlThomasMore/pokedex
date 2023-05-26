@@ -13,7 +13,8 @@ class InfoScreen extends StatelessWidget {
             title: const Center(child: Text('About')),
             backgroundColor: Colors.red),
         backgroundColor: Colors.grey,
-        body: Column(
+        body: SingleChildScrollView(child:
+    Column(
           children: [
             Image.asset('assets/images/pokedexPic.png'),
             const Center(
@@ -29,8 +30,12 @@ class InfoScreen extends StatelessWidget {
             const Center(
               child: Text("Made by Mathias Van Langendonck",
                   style: TextStyle(color: Colors.white)),
-            )
+            ),
+            Container(
+              margin: EdgeInsets.all(20),
+                    child: Text(MyConfig.aboutText,
+                        style: TextStyle(color: Colors.white)))
           ],
-        ));
+        )));
   }
 }
